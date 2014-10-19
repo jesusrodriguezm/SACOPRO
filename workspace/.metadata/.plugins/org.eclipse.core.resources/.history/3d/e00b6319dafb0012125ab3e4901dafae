@@ -1,0 +1,315 @@
+package com.jrm.sacopro
+
+import grails.plugins.springsecurity.Secured
+
+import com.jrm.sacopro.tareas.*
+import com.jrm.sacopro.anuncios.*
+import com.jrm.sacopro.colaboradores.*
+import com.jrm.sacopro.competencias.Competencia
+import com.jrm.sacopro.competencias.CompetenciaNivel
+import com.jrm.sacopro.competencias.CompetenciaNivelController;
+import com.jrm.sacopro.proyectos.*
+import com.jrm.sacopro.empresa.*
+
+@Secured(["ROLE_USUARIO"])
+class InicioController {
+
+	def springSecurityService
+
+	def index() {
+		def colaborador = Colaborador.read (springSecurityService.principal.id)
+		session.colaboradorLogueado = colaborador
+
+
+		def tareas = Tarea.findAllByEstadoAndEjecutor("Abierta", colaborador,[sort:"fechaTope", order:"asc"])
+
+		def etiquetas = EtiquetasTareas.list(sort:"nombre", order:"asc")
+		Date fecha = new Date()
+		fecha = fecha - 1
+		def anuncios = Anuncio.findAllByFechaExpiracionGreaterThanEquals(fecha)
+
+		def usuarios = Usuario.findAllByUsernameNotEqual (springSecurityService.principal.username)
+
+		//def proyectos = Proyecto.findAllByColaboradores(ProyectoColaborador.findAllByColaborador(colaborador) )
+		def proyectos = ProyectoColaborador.findAllByColaborador(colaborador)
+
+		session.usuariosSuplantar = usuarios
+
+		return [tareas: tareas, etiquetas: etiquetas, anuncios: anuncios, proyectos: proyectos] //, usuarios: usuarios]
+	}
+
+	def miInformacion(){
+		//def colaborador = Colaborador.read (springSecurityService.principal.id)
+		//session.colaboradorLogueado = colaborador
+
+		if (session.colaboradorLogueado != null) {
+			if (!session.colaboradorLogueado.isAttached()) {
+				session.colaboradorLogueado.attach()
+			}
+
+			def competencias = ColaboradorCompetenciaNivel.findAllByColaborador(session.colaboradorLogueado, [sort:"competencia" , order:"asc"])
+
+			def competenciasPosicion = BandaNivelPosicionCompetenciaNivel.findAllByPosicion(session.colaboradorLogueado.posicion, [sort:"competenciaNivel" , order:"asc"])
+
+			def posiciones = BandaNivelPosicion.findAll()
+
+			return [colaborador:session.colaboradorLogueado, competencias:competencias, competenciasPosicion: competenciasPosicion, posiciones:posiciones] //, usuarios: usuarios]
+		}
+		else {
+			redirect(controller: "login", action: "denied")
+		}
+
+	}
+
+	def empresa() {
+		def bandasLista = BandaProfesional.findAll()
+		def nivelesProfesionales = NivelProfesional.findAll ()
+		def colaboradores = Colaborador.findAll ()
+		def competenciaNivel = CompetenciaNivel.findAll ()
+		//return [bandas: bandas]
+		//def bandas = BandaNivelPosicionCompetenciaNivel.getAll()
+		//return [bandas:bandas]
+		def bandas = BandaNivelPosicion.getAll()
+		def competencias = Competencia.getAll()
+		return [bandas:bandas, bandasLista: bandasLista, nivelesLista:nivelesProfesionales, colaboradores:colaboradores, competenciaNivel:competenciaNivel, competencias:competencias]
+
+	}
+
+	@Secured([
+		"ROLE_ADMIN",
+		"ROLE_CapitalHumano",
+		"ROLE_Gerencia"
+	])
+
+	def analisis() {
+		def colaboradores = Colaborador.findAll()
+		def posiciones = BandaNivelPosicion.findAll()
+
+		return [colaboradores:colaboradores, posiciones:posiciones]
+	}
+
+	def analisisColaboradorPosicion () {
+		String salida = ""
+
+		if (params.colaborador == "") {
+			render(contentType:'text/plain', text: "<div class='alert alert-error'>Debe seleccionar un colaborador</div>")
+			return
+		}
+
+		if (params.posicion == "") {
+			render(contentType:'text/plain', text: "<div class='alert alert-error'>Debe seleccionar un colaborador</div>")
+			return
+		}
+		try {
+			Colaborador colaborador = Colaborador.get(params.colaborador)
+			BandaNivelPosicion posicion = BandaNivelPosicion.get(params.posicion)
+
+			salida = salida.concat("<h1>")
+			salida = salida.concat("Colaborador: ")
+			salida = salida.concat(colaborador.toString())
+			salida = salida.concat(" - Posicion: ")
+			salida = salida.concat(posicion.toString())
+			salida = salida.concat ("</h1>")
+
+			List<ColaboradorCompetenciaNivel> competenciasColaborador = ColaboradorCompetenciaNivel.findAllByColaborador(colaborador, [sort:"competencia" , order:"asc"])
+			List<BandaNivelPosicionCompetenciaNivel> competenciasPosicion = BandaNivelPosicionCompetenciaNivel.findAllByPosicion(posicion, [sort:"competenciaNivel" , order:"asc"])
+			List<CompetenciaNivel> competenciasYaTratadas = new ArrayList<CompetenciaNivel>()
+
+			salida = salida.concat("<strong>Posicion actual: </strong>")
+			salida = salida.concat(colaborador.posicion.toString())
+			/*salida = salida.concat("<br>")
+			 salida = salida.concat("<br>")
+			 salida = salida.concat(competenciasColaborador.toListString())
+			 salida = salida.concat("<br>")
+			 salida = salida.concat(competenciasPosicion.toListString())
+			 salida = salida.concat("<br>")
+			 */
+			salida = salida.concat("<table class='table table-condensed table-bordered'>")
+			salida = salida.concat("<thead><tr><td>Competencia</td><td>" + colaborador + "</td></tr></thead>")
+
+			for (int i=0; i < competenciasColaborador.size() ; i++){
+				ColaboradorCompetenciaNivel cn = competenciasColaborador.get(i)
+
+				if (exisePosicionEnLista(competenciasPosicion,cn.competencia)) {
+					salida = salida.concat("<tr class='alert alert-success'>")
+					salida = salida.concat("<td>")
+					salida = salida.concat(cn.competencia.toString())
+					salida = salida.concat("</td>")
+					salida = salida.concat("<td>")
+					salida = salida.concat("Ok")
+					salida = salida.concat("</td>")
+					salida = salida.concat("</tr>")
+				}
+				else {
+					int res = 0
+					res = analisisNivel(competenciasPosicion, cn.competencia.competencia, cn.competencia.nivel, competenciasYaTratadas)
+					if (res < 0) {
+						salida = salida.concat("<tr class='alert alert-block'>")
+						salida = salida.concat("<td>")
+						salida = salida.concat(cn.competencia.toString())
+						salida = salida.concat("</td>")
+						salida = salida.concat("<td>")
+						salida = salida.concat("Nivel Menor")
+						salida = salida.concat("</td>")
+						salida = salida.concat("</tr>")
+					}
+					else {
+						if (res > 0) {
+							salida = salida.concat("<tr class='alert alert-success'>")
+							salida = salida.concat("<td>")
+							salida = salida.concat(cn.competencia.toString())
+							salida = salida.concat("</td>")
+							salida = salida.concat("<td>")
+							salida = salida.concat("Nivel Mayor")
+							salida = salida.concat("</td>")
+							salida = salida.concat("</tr>")
+						}
+						else {
+							salida = salida.concat("<tr class='alert alert-info'>")
+							salida = salida.concat("<td>")
+							salida = salida.concat(cn.competencia.toString())
+							salida = salida.concat("</td>")
+							salida = salida.concat("<td>")
+							salida = salida.concat("No Requerida")
+							salida = salida.concat("</td>")
+							salida = salida.concat("</tr>")
+						}
+					}
+				}
+				competenciasYaTratadas.add(cn.competencia)
+			}
+
+			for (int i=0; i < competenciasPosicion.size() ; i++){
+				BandaNivelPosicionCompetenciaNivel cn = competenciasPosicion.get(i)
+
+				if (! competenciasYaTratadas.contains(cn.competenciaNivel)) {
+					salida = salida.concat("<tr class='alert alert-error'>")
+					salida = salida.concat("<td>")
+					salida = salida.concat(cn.competenciaNivel.toString())
+					salida = salida.concat("</td>")
+					salida = salida.concat("<td>")
+					salida = salida.concat("No")
+					salida = salida.concat("</td>")
+					salida = salida.concat("</tr>")
+				}
+			}
+
+			salida = salida.concat("</table>")
+
+		} catch (Exception e) {
+			salida = "<BR><sacopro:textoAParrafo>"
+			salida = salida.concat(e.toString())
+			salida = salida.concat("</sacopro:textoAParrafo>")
+		}
+
+
+		render(contentType:'text/plain', text: salida)
+	}
+
+	private int analisisNivel (List<BandaNivelPosicionCompetenciaNivel> lista, Competencia cn, NivelesCompetencias nc, List<CompetenciaNivel> competenciasYaTratadas){
+		for (int i=0; i < lista.size() ; i++){
+			if (lista.get(i).competenciaNivel.competencia.id == cn.id) {				
+				if (lista.get(i).competenciaNivel.nivel.nombre  < nc.toString()) {
+					competenciasYaTratadas.add(lista.get(i).competenciaNivel)
+					return -1
+				}
+				else {
+					if (lista.get(i).competenciaNivel.nivel.nombre  > nc.toString()) {
+						competenciasYaTratadas.add(lista.get(i).competenciaNivel)
+						return 1
+					}
+				}
+
+			}
+		}
+		return 0
+	}
+
+	private boolean exisePosicionEnLista(List<BandaNivelPosicionCompetenciaNivel> lista, CompetenciaNivel cn){
+		for (int i=0; i < lista.size() ; i++){
+			if (lista.get(i).competenciaNivel == cn) {
+				return true
+			}
+		}
+		return false
+	}
+
+
+	def analisisColaboradoresPosicion () {
+		String salida = ""
+		try {
+			if (params.colaborador == null) {
+				render(contentType:'text/plain', text: "<div class='alert alert-error'>Debe seleccionar un colaborador</div>")
+				return
+			}
+
+			if (params.posicion == "") {
+				render(contentType:'text/plain', text: "<div class='alert alert-error'>Debe seleccionar un colaborador</div>")
+				return
+			}
+
+			ArrayList<Colaborador> colaboradores = new ArrayList<Colaborador>()
+			for (int i=0; i<params.colaborador.size();i++){
+				colaboradores.add(Colaborador.get(params.colaborador.getAt(i)))
+			}
+
+			BandaNivelPosicion posicion = BandaNivelPosicion.get(params.posicion)
+			//render colaboradores
+
+			List<BandaNivelPosicionCompetenciaNivel> competenciasPosicion = BandaNivelPosicionCompetenciaNivel.findAllByPosicion(posicion, [sort:"competenciaNivel" , order:"asc"])
+
+			salida = salida.concat("<table class='table table-condensed table-bordered'>")
+			salida = salida.concat("<thead><tr><td>Competencia</td>")
+			for (int i = 0; i< colaboradores.size(); i++ ){
+				salida = salida.concat("<td>" + colaboradores.getAt(i) + "</td>")
+			}
+			salida = salida.concat("</tr></thead>")
+
+			for (int i = 0; i< competenciasPosicion.size();i++){
+				CompetenciaNivel compentenciaNivelPosicion = competenciasPosicion.getAt(i).competenciaNivel
+				salida = salida.concat("<tr>")
+				salida = salida.concat("<td> " + compentenciaNivelPosicion + " </td>")
+				for (int j=0; j<colaboradores.size();j++){
+					Colaborador c = colaboradores.getAt(i)
+					salida = salida.concat("<td>")
+					ColaboradorCompetenciaNivel competenciaNivelColaborador = ColaboradorCompetenciaNivel.findByCompetencia(compentenciaNivelPosicion)
+					if (competenciaNivelColaborador != null) {
+						salida = salida.concat("OK")
+					}
+					else {
+						ArrayList<ColaboradorCompetenciaNivel> listaCompetenciasColaborador = ColaboradorCompetenciaNivel.findAllByColaborador(c)
+						for (int l = 0; l<listaCompetenciasColaborador.size(); l++){
+							CompetenciaNivel cnColaborador = listaCompetenciasColaborador.getAt(l)
+							
+								
+						}
+												
+						salida = salida.concat("NO")
+					}
+					
+					salida = salida.concat("</td>")
+				}
+				salida = salida.concat("")
+
+
+
+				salida = salida.concat("</tr>")
+			}
+
+			salida = salida.concat("</table>")
+
+		} catch (Exception e) {
+			salida = "<BR><sacopro:textoAParrafo>"
+			salida = salida.concat(e.toString())
+			salida = salida.concat("</sacopro:textoAParrafo>")
+		}
+
+
+		render(contentType:'text/plain', text: salida)
+	}
+
+
+
+	@Secured(["ROLE_ADMIN"])
+	def adminOnly() {  }
+}

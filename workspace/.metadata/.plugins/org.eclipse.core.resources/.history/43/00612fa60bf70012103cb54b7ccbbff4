@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+<meta name="layout" content="main" />
+<r:require module="application" />
+<r:require modules="bootstrap" />
+</head>
+<body>
+	<g:render template='navegacion' />
+	<div class="row-fluid">
+		<div class="span12">
+			<p class="text-center">
+				<%--<strong>${message(code: "sacopro.index.mensajePaginaInicio")}</strong> --%>
+				<i class="icon-eye-open"></i> <strong>Empresa</strong>
+			</p>
+		</div>
+	</div>
+
+	<div class="row-fluid">
+		<div class=span12>
+			<h1>Posiciones</h1>
+		</div>
+		<div class="span12">
+			<dl class="dl-horizontal">
+				<g:each in="${bandas}" var="bandas">
+					<dt>
+						${ bandas }
+					</dt>
+					<dd>
+						<%--<g:each in="${banda.bandaNivelPosicion}" var="bandaNivelPosicion">
+							${ bandaNivelPosicion.nivel } - ${ bandaNivelPosicion.posicion }
+							<ul class="unstyled">
+								<g:each in="${banda.bandaNivelPosicion.competencias}"
+									var="competencia">
+									<li>${competencia.competenciaNivel}</li>
+								</g:each>
+							</ul>
+							<br>
+						</g:each>
+ --%>
+					</dd>
+				</g:each>
+			</dl>
+		</div>
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+<uml>
+   <greenVersion="30500"/>
+   <type>
+      <name="=sacopro/grails-app\/domain<com.jrm.sacopro{Moneda.groovy[Moneda"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="0"/>
+      <y="0"/>
+   </type>
+   <type>
+      <name="=sacopro/grails-app\/domain<com.jrm.sacopro{Perfil.groovy[Perfil"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="200"/>
+      <y="0"/>
+   </type>
+   <type>
+      <name="=sacopro/grails-app\/domain<com.jrm.sacopro{Proveedor.groovy[Proveedor"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="400"/>
+      <y="0"/>
+   </type>
+   <type>
+      <name="=sacopro/grails-app\/domain<com.jrm.sacopro{Usuario.groovy[Usuario"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="600"/>
+      <y="0"/>
+   </type>
+   <type>
+      <name="=sacopro/grails-app\/domain<com.jrm.sacopro{UsuarioPerfil.groovy[UsuarioPerfil"/>
+      <height="-1"/>
+      <width="-1"/>
+      <x="0"/>
+      <y="200"/>
+   </type>
+</uml>
+

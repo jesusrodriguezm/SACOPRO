@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<typeInfoHistroy>
+<typeInfo handle="=sacopro/grails-app\/domain&lt;com.jrm.sacopro{Perfil.groovy[Perfil" modifiers="1" timestamp="1372537269000"/>
+<typeInfo handle="=sacopro/grails-app\/domain&lt;com.jrm.sacopro{Moneda.groovy[Moneda" modifiers="1" timestamp="1376765974000"/>
+<typeInfo handle="=sacopro/grails-app\/domain&lt;com.jrm.sacopro{Proveedor.groovy[Proveedor" modifiers="1" timestamp="1376759924000"/>
+<typeInfo handle="=sacopro/grails-app\/domain&lt;com.jrm.sacopro.formacion{CentroEducativo.groovy[CentroEducativo" modifiers="1" timestamp="1376863744000"/>
+<typeInfo handle="=sacopro/grails-app\/domain&lt;com.jrm.sacopro{Usuario.groovy[Usuario" modifiers="1" timestamp="1376270849000"/>
+<typeInfo handle="=sacopro/grails-app\/domain&lt;com.jrm.sacopro.empresa{BandaNivelPosicionCompetenciaNivel.groovy[BandaNivelPosicionCompetenciaNivel" modifiers="1" timestamp="1376759802000"/>
+<typeInfo handle="=sacopro/grails-app\/domain&lt;com.jrm.sacopro.proyectos{Tecnologia.groovy[Tecnologia" modifiers="1" timestamp="1376763400000"/>
+<typeInfo handle="=sacopro/grails-app\/domain&lt;com.jrm.sacopro.proyectos{ProyectoColaborador.groovy[ProyectoColaborador" modifiers="1" timestamp="1376263370000"/>
+<typeInfo handle="=sacopro/grails-app\/domain&lt;com.jrm.sacopro.proyectos{Funcion.groovy[Funcion" modifiers="1" timestamp="1376263354000"/>
+<typeInfo handle="=sacopro/grails-app\/domain&lt;com.jrm.sacopro.proyectos{Cliente.groovy[Cliente" modifiers="1" timestamp="1376263347000"/>
+<typeInfo handle="=sacopro/grails-app\/domain&lt;com.jrm.sacopro.anuncios{Anuncio.groovy[Anuncio" modifiers="1" timestamp="1376263056000"/>
+<typeInfo handle="=sacopro/grails-app\/domain&lt;com.jrm.sacopro.anuncios{Categoria.groovy[Categoria" modifiers="1" timestamp="1376263073000"/>
+<typeInfo handle="=sacopro/grails-app\/domain&lt;com.jrm.sacopro.anuncios{Etiqueta.groovy[Etiqueta" modifiers="1" timestamp="1376263099000"/>
+<typeInfo handle="=sacopro/grails-app\/domain&lt;com.jrm.sacopro.colaboradores{Estado.groovy[Estado" modifiers="1" timestamp="1376263169000"/>
+</typeInfoHistroy>

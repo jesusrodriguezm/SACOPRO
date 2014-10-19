@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="prueba.MIControlador"/>
+<fullyQualifiedTypeName name="prueba.NivelCompetenciaCatalogo"/>
+<fullyQualifiedTypeName name="prueba.CatalogoCompetencia"/>
+<fullyQualifiedTypeName name="prueba.CatalogoNivelesCompetencia"/>
+<fullyQualifiedTypeName name="prueba.CompetenciaNivel"/>
+<fullyQualifiedTypeName name="com.jrm.sacopro.CursoCompetenciaNivel"/>
+<fullyQualifiedTypeName name="com.jrm.sacopro.BandaProfesional"/>
+<fullyQualifiedTypeName name="com.jrm.sacopro.CursoHorario"/>
+<fullyQualifiedTypeName name="com.jrm.sacopro.colaboradores.Colaborador"/>
+<fullyQualifiedTypeName name="com.jrm.sacopro.formacion.CentroEducativo"/>
+<fullyQualifiedTypeName name="com.jrm.sacopro.AnalisisCompetenciasPosicionService"/>
+<fullyQualifiedTypeName name="com.sun.org.apache.xalan.internal.xsltc.compiler.Import"/>
+<fullyQualifiedTypeName name="com.jrm.sacopro.colaboradores.ColaboradorController"/>
+<fullyQualifiedTypeName name="com.sun.org.apache.xerces.internal.impl.dv.xs.DateDV"/>
+<fullyQualifiedTypeName name="com.jrm.sacopro.empresa.BandaProfesional"/>
+<fullyQualifiedTypeName name="com.jrm.sacopro.empresa.NivelProfesional"/>
+</qualifiedTypeNameHistroy>

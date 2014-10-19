@@ -1,0 +1,1 @@
+<li> <g:link action="show" id="${colaborador.id}">${ colaborador }</g:link></li>	

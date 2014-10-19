@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename field &apos;detalles&apos; in &apos;com.jrm.sacopro.tareas.Tarea&apos; to &apos;descripcion&apos;&#x0A;- Original project: &apos;sacopro&apos;&#x0A;- Original element: &apos;com.jrm.sacopro.tareas.Tarea.detalles&apos;&#x0A;- Renamed element: &apos;com.jrm.sacopro.tareas.Tarea.descripcion&apos;&#x0A;- Update references to refactored element&#x0A;- Update textual occurrences in comments and strings" delegate="false" deprecate="false" description="Rename field &apos;detalles&apos;" flags="589826" getter="false" id="org.eclipse.jdt.ui.rename.field" input="/grails-app\/domain&lt;com.jrm.sacopro.tareas{Tarea.groovy[Tarea^detalles" name="descripcion" references="true" setter="false" stamp="1373827311312" textual="false" version="1.0"/>
+</session>

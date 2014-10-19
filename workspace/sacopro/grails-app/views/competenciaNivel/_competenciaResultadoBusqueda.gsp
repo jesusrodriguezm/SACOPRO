@@ -1,0 +1,1 @@
+<li> <g:link action="show" id="${competencia.id}">${ competencia }</g:link></li>	
